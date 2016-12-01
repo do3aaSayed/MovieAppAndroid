@@ -1,5 +1,7 @@
 package com.example.doaa.movieapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,7 +38,9 @@ public class DetailsActivityFragment extends Fragment {
     Bundle receivedBundle;
     JSONParser parser = new JSONParser();
     ListView trailersList,reviewsList;
-    MoviesAdapter adapter = new MoviesAdapter();
+    String apiKey = "api_key=cd816dc09b72c3ddab5b84c0949d0bdf";
+    String baseURL = "https://api.themoviedb.org/3/movie/";
+    List<Trailer> mTrailers = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +79,15 @@ public class DetailsActivityFragment extends Fragment {
                 favorite.setVisibility(View.VISIBLE);
             }
         });
+
+        trailersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailers.get(i).getTrailerUrl()));
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 
@@ -91,10 +105,7 @@ public class DetailsActivityFragment extends Fragment {
         @Override
         protected List<Trailer> doInBackground(String... strings) {
 
-            List<Trailer> mTrailers = new ArrayList<>();
             String trailerJSONString = null;
-            String apiKey = "api_key=cd816dc09b72c3ddab5b84c0949d0bdf";
-            String baseURL = "https://api.themoviedb.org/3/movie/";
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
 
@@ -163,8 +174,6 @@ public class DetailsActivityFragment extends Fragment {
 
             List<Reviews> mReviews = new ArrayList<>();
             String reviewsJSONString = null;
-            String apiKey = "api_key=cd816dc09b72c3ddab5b84c0949d0bdf";
-            String baseURL = "https://api.themoviedb.org/3/movie/";
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
 

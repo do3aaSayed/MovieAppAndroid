@@ -40,7 +40,18 @@ public class MainActivity extends AppCompatActivity implements SelectedMovieList
             startActivity(intent);
         }
         else{
-
+            boolean isFavorite = db.isFavorite(selectedMovie.getMovieId());
+            DetailsActivityFragment mDetailsFragment = new DetailsActivityFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("id",selectedMovie.getMovieId());
+            bundle.putString("name",selectedMovie.getMovieName());
+            bundle.putDouble("rate",selectedMovie.getMovieUserRating());
+            bundle.putString("release date",selectedMovie.getMovieReleaseDate());
+            bundle.putString("overview",selectedMovie.getMovieOverView());
+            bundle.putString("poster",selectedMovie.getMoviePoster());
+            bundle.putBoolean("favorite",isFavorite);
+            mDetailsFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.details,mDetailsFragment,"").commit();
         }
     }
 }

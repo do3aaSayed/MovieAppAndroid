@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import org.json.JSONException;
 
@@ -30,12 +31,14 @@ import java.util.List;
 public class MainActivityFragment extends Fragment {
 
     GridView gridView;
+    ImageView gridItem;
     String menuSelectedItem;
     JSONParser parser = new JSONParser();
     private SelectedMovieListener mListener;
     String moviesType = null;
     String firstTimeURL;
     List<Movie> mMoviesList = new ArrayList<>();
+    List<Movie> favourites;
 
     public MainActivityFragment() {
 
@@ -69,13 +72,21 @@ public class MainActivityFragment extends Fragment {
         switch (id){
             case R.id.action_most_popular:
                 menuSelectedItem = "Most popular";
+                moviesType = "popular?";
                 break;
             case R.id.action_top_rated:
                 menuSelectedItem = "Top rated";
+                moviesType = "top_rated?";
                 break;
             case R.id.action_favorite:
                 menuSelectedItem = "Favorites";
                 break;
+        }
+        if(menuSelectedItem.equals("Favorites")){
+            DatabaseHelper db = new DatabaseHelper(getActivity());
+            favourites = db.getAllMovies();
+            gridView.setAdapter(new MoviesAdapter(getActivity(),favourites));
+            return super.onOptionsItemSelected(item);
         }
         new FetchMoviesPostersTask().execute();
         return super.onOptionsItemSelected(item);
@@ -90,7 +101,13 @@ public class MainActivityFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Movie selectedMovie = mMoviesList.get(i);
+                Movie selectedMovie;
+                if(menuSelectedItem==("Favorites")){
+                    selectedMovie = favourites.get(i);
+                }
+                else {
+                    selectedMovie = mMoviesList.get(i);
+                }
                 mListener.setSelectedMovie(selectedMovie);
             }
         });
@@ -112,7 +129,7 @@ public class MainActivityFragment extends Fragment {
            // Uri uri = Uri.parse(baseURL).buildUpon().appendQueryParameter("api_key",BuildConfig.MyMovieAppApiKey).build();
 
             if (menuSelectedItem != null)
-                firstTimeURL = baseURL.concat(setMoviesType(menuSelectedItem)).concat(apiKey);
+                firstTimeURL = baseURL.concat(moviesType).concat(apiKey);
 
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
@@ -173,17 +190,17 @@ public class MainActivityFragment extends Fragment {
             gridView.setAdapter(new MoviesAdapter(getActivity(),result));
         }
 
-        public String setMoviesType(String selectedType)
-        {
-            if(selectedType == "Most popular") {
-                moviesType = "popular?";
-            }
-            else if(selectedType == "Top rated"){
-                moviesType = "top_rated?";
-            }
-
-            return moviesType;
-        }
+//        public String setMoviesType(String selectedType)
+//        {
+//            if(selectedType == "Most popular") {
+//                moviesType = "popular?";
+//            }
+//            else if(selectedType == "Top rated"){
+//                moviesType = "top_rated?";
+//            }
+//
+//            return moviesType;
+//        }
     }
 
 

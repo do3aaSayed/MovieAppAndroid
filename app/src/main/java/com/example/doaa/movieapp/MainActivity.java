@@ -26,14 +26,17 @@ public class MainActivity extends AppCompatActivity implements SelectedMovieList
     @Override
     public void setSelectedMovie(Movie selectedMovie) {
         // case phone
+        DatabaseHelper db = new DatabaseHelper(this);
         if(!mTwoPane){
             Intent intent = new Intent(MainActivity.this,DetailsActivity.class);
+            boolean isFavorite = db.isFavorite(selectedMovie.getMovieId());
             intent.putExtra("id",selectedMovie.getMovieId());
             intent.putExtra("name",selectedMovie.getMovieName());
             intent.putExtra("rate",selectedMovie.getMovieUserRating());
             intent.putExtra("release date",selectedMovie.getMovieReleaseDate());
             intent.putExtra("overview",selectedMovie.getMovieOverView());
             intent.putExtra("poster",selectedMovie.getMoviePoster());
+            intent.putExtra("favorite",isFavorite);
             startActivity(intent);
         }
         else{

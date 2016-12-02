@@ -41,6 +41,8 @@ public class DetailsActivityFragment extends Fragment {
     String apiKey = "api_key=cd816dc09b72c3ddab5b84c0949d0bdf";
     String baseURL = "https://api.themoviedb.org/3/movie/";
     List<Trailer> mTrailers = new ArrayList<>();
+    List<Reviews> mReviews = new ArrayList<>();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,12 +58,15 @@ public class DetailsActivityFragment extends Fragment {
         TextView overview = (TextView)view.findViewById(R.id.movie_overview);
         trailersList = (ListView) view.findViewById(R.id.movie_trailers);
         reviewsList = (ListView) view.findViewById(R.id.movie_reviews);
-
         Picasso.with(getActivity()).load(receivedBundle.get("poster").toString()).into(poster);
         name.setText(receivedBundle.get("name").toString());
         date.setText(receivedBundle.get("release date").toString());
         rate.setText(receivedBundle.get("rate").toString());
         overview.setText(receivedBundle.get("overview").toString());
+        if(receivedBundle.getBoolean("favorite")){
+            notFavorite.setVisibility(View.INVISIBLE);
+            favorite.setVisibility(View.VISIBLE);
+        }
         new FetchMovieTrailer().execute();
         new FetchMovieReviews().execute();
         favorite.setOnClickListener(new ImageView.OnClickListener() {
@@ -69,6 +74,8 @@ public class DetailsActivityFragment extends Fragment {
             public void onClick(View view) {
                 notFavorite.setVisibility(View.VISIBLE);
                 favorite.setVisibility(View.INVISIBLE);
+                DatabaseHelper db = new DatabaseHelper(getActivity());
+                db.deleteMovieFromFavourites(receivedBundle.getInt("id"));
             }
         });
 
@@ -77,6 +84,8 @@ public class DetailsActivityFragment extends Fragment {
             public void onClick(View view) {
                 notFavorite.setVisibility(View.INVISIBLE);
                 favorite.setVisibility(View.VISIBLE);
+                DatabaseHelper db = new DatabaseHelper(getActivity());
+                db.addFavoriteMovie(receivedBundle);
             }
         });
 
@@ -172,7 +181,6 @@ public class DetailsActivityFragment extends Fragment {
         @Override
         protected List<Reviews> doInBackground(String... strings) {
 
-            List<Reviews> mReviews = new ArrayList<>();
             String reviewsJSONString = null;
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;

@@ -104,6 +104,7 @@ public class MoviesAdapter extends BaseAdapter {
             TextView reviewContent = (TextView)view.findViewById(R.id.review_content);
             reviewerName.setText(mReviewsList.get(i).getAuthorName());
             reviewContent.setText(mReviewsList.get(i).getContent());
+
         }
         return view;
     }

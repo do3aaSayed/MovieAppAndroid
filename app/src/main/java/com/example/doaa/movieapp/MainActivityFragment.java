@@ -202,10 +202,7 @@ public class MainActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Movie> result) {
             super.onPostExecute(result);
-            if(result!=null)
-                gridView.setAdapter(new MoviesAdapter(getActivity(), result));
-            else
-                Toast.makeText(getActivity(),"no internet connect , please try again later!",Toast.LENGTH_LONG).show();
+            gridView.setAdapter(new MoviesAdapter(getActivity(), result));
         }
 
     }

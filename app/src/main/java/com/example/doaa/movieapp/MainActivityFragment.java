@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
 
 import org.json.JSONException;
 
@@ -31,7 +30,6 @@ import java.util.List;
 public class MainActivityFragment extends Fragment {
 
     GridView gridView;
-    ImageView gridItem;
     String menuSelectedItem;
     JSONParser parser = new JSONParser();
     private SelectedMovieListener mListener;
@@ -39,6 +37,7 @@ public class MainActivityFragment extends Fragment {
     String firstTimeURL;
     List<Movie> mMoviesList = new ArrayList<>();
     List<Movie> favourites;
+    Boolean isMenuItemSelected = false;
 
     public MainActivityFragment() {
 
@@ -56,7 +55,7 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu;
         menuInflater.inflate(R.menu.menu_main, menu);
     }
 
@@ -64,10 +63,9 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
+        isMenuItemSelected = true;
         //noinspection SimplifiableIfStatement
         switch (id){
             case R.id.action_most_popular:

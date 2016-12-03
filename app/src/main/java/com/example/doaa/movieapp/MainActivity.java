@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity implements SelectedMovieList
         }
     }
 
-
     @Override
     public void setSelectedMovie(Movie selectedMovie) {
         // case phone

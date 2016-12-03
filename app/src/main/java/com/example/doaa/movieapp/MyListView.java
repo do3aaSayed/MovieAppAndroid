@@ -9,12 +9,12 @@ import android.widget.ListView;
  * Created by doaa on 12/3/2016.
  */
 
-public class CustomListView extends ListView {
+public class MyListView extends ListView {
 
     private android.view.ViewGroup.LayoutParams params;
     private int oldCount = 0;
 
-    public CustomListView(Context context, AttributeSet attrs)
+    public MyListView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
     }
@@ -24,10 +24,10 @@ public class CustomListView extends ListView {
     {
         if (getCount() != oldCount)
         {
-            int height = getChildAt(0).getHeight() + 1 ;
+            int mHeight = getChildAt(0).getHeight() + 1 ;
             oldCount = getCount();
             params = getLayoutParams();
-            params.height = getCount() * height;
+            params.height = getCount() * mHeight;
             setLayoutParams(params);
         }
 
@@ -39,10 +39,10 @@ public class CustomListView extends ListView {
     {
         super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(MeasureSpec.UNSPECIFIED,0) );
 
-        int childHeight = getMeasuredHeight() - (getListPaddingTop() + getListPaddingBottom() +  getVerticalFadingEdgeLength() * 2);
+        int listItemHeight = getMeasuredHeight() - (getListPaddingTop() + getListPaddingBottom() +  getVerticalFadingEdgeLength() * 2);
 
-        int fullHeight = getListPaddingTop() + getListPaddingBottom() + childHeight*(getCount());
+        int listHeight = getListPaddingTop() + getListPaddingBottom() + listItemHeight*(getCount());
 
-        setMeasuredDimension(getMeasuredWidth(), fullHeight);
+        setMeasuredDimension(getMeasuredWidth(), listHeight);
     }
 }

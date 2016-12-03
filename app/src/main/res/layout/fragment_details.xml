@@ -91,13 +91,13 @@
             android:text="Trailers:"
             android:textSize="20sp" />
 
-        <com.example.doaa.movieapp.CustomListView
+        <com.example.doaa.movieapp.MyListView
             android:id="@+id/movie_trailers"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_below="@id/trailer"
             android:paddingTop="20dp">
-        </com.example.doaa.movieapp.CustomListView>
+        </com.example.doaa.movieapp.MyListView>
 
         <TextView
             android:id="@+id/reviews"
@@ -108,13 +108,13 @@
             android:text="Reviews:"
             android:textSize="20sp" />
 
-        <com.example.doaa.movieapp.CustomListView
+        <com.example.doaa.movieapp.MyListView
             android:id="@+id/movie_reviews"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_below="@id/reviews"
             android:paddingTop="20dp">
-        </com.example.doaa.movieapp.CustomListView>
+        </com.example.doaa.movieapp.MyListView>
 
 
     </RelativeLayout>

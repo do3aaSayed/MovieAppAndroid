@@ -1,6 +1,8 @@
 package com.example.doaa.movieapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,7 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -44,6 +46,14 @@ public class DetailsActivityFragment extends Fragment {
     List<Reviews> mReviews = new ArrayList<>();
 
 
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,8 +77,13 @@ public class DetailsActivityFragment extends Fragment {
             notFavorite.setVisibility(View.INVISIBLE);
             favorite.setVisibility(View.VISIBLE);
         }
-        new FetchMovieTrailer().execute();
-        new FetchMovieReviews().execute();
+        if(isOnline()) {
+            new FetchMovieTrailer().execute();
+            new FetchMovieReviews().execute();
+        }
+        else
+            Toast.makeText(getActivity(),"no internet connect to show trailers and reviews , please try again later!",Toast.LENGTH_LONG).show();
+
         favorite.setOnClickListener(new ImageView.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,7 +122,6 @@ public class DetailsActivityFragment extends Fragment {
         }
         return b;
     }
-
 
     public class FetchMovieTrailer extends AsyncTask<String,Void,List<Trailer>> {
 
@@ -186,7 +200,7 @@ public class DetailsActivityFragment extends Fragment {
             BufferedReader reader = null;
 
             try {
-                URL url = new URL(baseURL.concat(receivedBundle.get("id").toString()).concat("reviews?").concat(apiKey));
+                URL url = new URL(baseURL.concat(receivedBundle.get("id").toString()).concat("/reviews?").concat(apiKey));
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");

@@ -1,5 +1,7 @@
 package com.example.doaa.movieapp;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -53,6 +56,14 @@ public class MainActivityFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         // Inflate the menu;
@@ -86,7 +97,10 @@ public class MainActivityFragment extends Fragment {
             gridView.setAdapter(new MoviesAdapter(getActivity(),favourites));
             return super.onOptionsItemSelected(item);
         }
-        new FetchMoviesPostersTask().execute();
+        if(isOnline())
+            new FetchMoviesPostersTask().execute();
+        else
+            Toast.makeText(getActivity(),"no internet connect , please try again later!",Toast.LENGTH_LONG).show();
         return super.onOptionsItemSelected(item);
     }
 
@@ -109,7 +123,10 @@ public class MainActivityFragment extends Fragment {
                 mListener.setSelectedMovie(selectedMovie);
             }
         });
-        new FetchMoviesPostersTask().execute();
+        if(isOnline())
+            new FetchMoviesPostersTask().execute();
+        else
+            Toast.makeText(getActivity(),"no internet connect , please try again later!",Toast.LENGTH_LONG).show();
         return view;
     }
 
@@ -124,7 +141,7 @@ public class MainActivityFragment extends Fragment {
             firstTimeURL = "https://api.themoviedb.org/3/movie/popular?api_key=cd816dc09b72c3ddab5b84c0949d0bdf";
             String baseURL = "https://api.themoviedb.org/3/movie/";
 
-           // Uri uri = Uri.parse(baseURL).buildUpon().appendQueryParameter("api_key",BuildConfig.MyMovieAppApiKey).build();
+            // Uri uri = Uri.parse(baseURL).buildUpon().appendQueryParameter("api_key",BuildConfig.MyMovieAppApiKey).build();
 
             if (menuSelectedItem != null)
                 firstTimeURL = baseURL.concat(moviesType).concat(apiKey);
@@ -185,20 +202,12 @@ public class MainActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Movie> result) {
             super.onPostExecute(result);
-            gridView.setAdapter(new MoviesAdapter(getActivity(),result));
+            if(result!=null)
+                gridView.setAdapter(new MoviesAdapter(getActivity(), result));
+            else
+                Toast.makeText(getActivity(),"no internet connect , please try again later!",Toast.LENGTH_LONG).show();
         }
 
-//        public String setMoviesType(String selectedType)
-//        {
-//            if(selectedType == "Most popular") {
-//                moviesType = "popular?";
-//            }
-//            else if(selectedType == "Top rated"){
-//                moviesType = "top_rated?";
-//            }
-//
-//            return moviesType;
-//        }
     }
 
 

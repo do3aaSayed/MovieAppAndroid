@@ -65,15 +65,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         fMovies.close(); // Closing database connection
     }
 
-    public int getFavoritesCount() {
-        String query = "SELECT * FROM " + moviesTable;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        int count = cursor.getCount();
-        cursor.close();
-        return count;
-    }
-
     public List<Movie> getAllMovies() {
         // Select All Query
         List<Movie> favourites = new ArrayList<>();

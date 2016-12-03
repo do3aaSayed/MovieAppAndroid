@@ -41,7 +41,7 @@ public class MyListView extends ListView {
 
         int listItemHeight = getMeasuredHeight() - (getListPaddingTop() + getListPaddingBottom() +  getVerticalFadingEdgeLength() * 2);
 
-        int listHeight = getListPaddingTop() + getListPaddingBottom() + listItemHeight*(getCount());
+        int listHeight = getListPaddingTop() + getListPaddingBottom() + (listItemHeight*(getCount()));
 
         setMeasuredDimension(getMeasuredWidth(), listHeight);
     }

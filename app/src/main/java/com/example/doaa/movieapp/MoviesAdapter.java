@@ -101,7 +101,7 @@ public class MoviesAdapter extends BaseAdapter {
         else if(isReviews.equals("true")){
             view = inflater.inflate(R.layout.reviews_list_item, viewGroup, false);
             TextView reviewerName = (TextView)view.findViewById(R.id.reviewer_name);
-            TextView reviewContent = (TextView)view.findViewById(R.id.reviewer_name);
+            TextView reviewContent = (TextView)view.findViewById(R.id.review_content);
             reviewerName.setText(mReviewsList.get(i).getAuthorName());
             reviewContent.setText(mReviewsList.get(i).getContent());
         }

@@ -137,7 +137,7 @@ public class MainActivityFragment extends Fragment {
         protected List<Movie> doInBackground(String... strings) {
 
             String moviesJSONString = null;
-            String apiKey = "api_key=";
+            String apiKey = "api_key=cd816dc09b72c3ddab5b84c0949d0bdf";
             firstTimeURL = "https://api.themoviedb.org/3/movie/popular?api_key=cd816dc09b72c3ddab5b84c0949d0bdf";
             String baseURL = "https://api.themoviedb.org/3/movie/";
 
